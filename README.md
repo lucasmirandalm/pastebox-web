@@ -1,155 +1,161 @@
-# Pastebox
+# Pastebox Web
 
 <p align="center">
-  <strong>A clean paste-sharing web app built with pure Django.</strong>
+  <strong>A clean paste management web application built with Go.</strong>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Django-Pure%20Django-092E20?style=for-the-badge&logo=django" alt="Django">
-  <img src="https://img.shields.io/badge/Tailwind%20CSS-UI-38B2AC?style=for-the-badge&logo=tailwindcss" alt="Tailwind CSS">
+  <img src="https://img.shields.io/badge/Go-Backend-00ADD8?style=for-the-badge&logo=go" alt="Go">
+  <img src="https://img.shields.io/badge/chi-Router-111111?style=for-the-badge" alt="chi router">
   <img src="https://img.shields.io/badge/PostgreSQL-Database-4169E1?style=for-the-badge&logo=postgresql" alt="PostgreSQL">
+  <img src="https://img.shields.io/badge/Tailwind%20CSS-UI-38B2AC?style=for-the-badge&logo=tailwindcss" alt="Tailwind CSS">
   <img src="https://img.shields.io/badge/Docker-Environment-2496ED?style=for-the-badge&logo=docker" alt="Docker">
-  <img src="https://img.shields.io/badge/Tests-12%20Passing-brightgreen?style=for-the-badge" alt="12 passing tests">
 </p>
-
----
-
-<table align="center">
-  <tr>
-    <td align="center">
-      <img src="github_assets/pasteboxdesktop.gif" alt="Pastebox desktop demo" width="520">
-      <br>
-      <strong>Desktop</strong>
-    </td>
-    <td align="center">
-      <img src="github_assets/pasteboxmobile.gif" alt="Pastebox mobile demo" width="220">
-      <br>
-      <strong>Mobile</strong>
-    </td>
-  </tr>
-</table>
 
 ---
 
 ## About
 
-**Pastebox** is a paste-sharing web application built with pure Django, Tailwind CSS, PostgreSQL, and Docker.
+**Pastebox Web** is a server-side web application for creating, organizing, editing, searching, and favoriting text pastes.
 
-Users can create private accounts, manage their own text pastes, search and filter their workspace, mark pastes as favorites, and share read-only public links.
+The project is built with Go, PostgreSQL, server-rendered HTML templates, Tailwind CSS, and a layered backend architecture.
 
-Pastebox was developed as a learning-focused Django project with attention to project organization, authentication, permissions, business rules, responsive design, and automated tests.
+This project is being developed as a learning-focused backend application with attention to:
+
+- clean project organization;
+- HTTP routing;
+- HTML rendering;
+- PostgreSQL integration;
+- migrations;
+- authentication;
+- authorization;
+- ownership rules;
+- form handling;
+- validation;
+- sessions;
+- testing;
+- production-minded structure.
 
 ---
 
-## Features
+## Tech Stack
 
-* Pure Django web application
-* PostgreSQL database
-* Docker-based development environment
-* Tailwind CSS interface
-* Custom visual design system
-* Responsive desktop and mobile layouts
-* User registration
-* User login and logout
-* Session-based authentication
-* Protected private paste dashboard
-* Per-user paste ownership
-* Paste creation
-* Paste listing
-* Paste editing
-* Paste deletion
-* Favorite and unfavorite actions
-* Text search
-* Favorite filtering
-* Pagination
-* Public shareable paste links
-* Public read-only paste pages
-* Copy-to-clipboard public links
-* Public slug regeneration after paste updates
-* Old public link invalidation after paste updates
-* Permission-based paste access
-* Django messages for user feedback
-* Automatically dismissed feedback messages
-* Django Admin integration
-* Automated model and view tests
+- **Go** — main backend language
+- **chi** — HTTP router
+- **html/template** — server-side HTML rendering
+- **PostgreSQL** — relational database
+- **golang-migrate** — database migrations
+- **Docker Compose** — local development database
+- **Tailwind CSS CDN** — interface styling during development
+
+---
+
+## Planned Features
+
+- Paste listing
+- Paste creation
+- Paste editing
+- Paste deletion
+- Favorite and unfavorite actions
+- Text search
+- Favorite filtering
+- Pagination
+- User registration
+- User login and logout
+- Session-based authentication
+- Per-user paste ownership
+- Protected private dashboard
+- Permission-based paste access
+- Public read-only paste links
+- Public link regeneration
+- Automated tests
 
 ---
 
 ## Design System
 
-Pastebox uses a clean and minimal visual style.
+Pastebox Web uses a clean, minimal, black-and-white visual style.
 
-| Token           | Color     | Usage                                      |
-| --------------- | --------- | ------------------------------------------ |
-| Main background | `#ffffff` | Page background                            |
-| Surface         | `#eeeeee` | Cards, inputs, and secondary areas         |
-| Accent          | `#ffbb11` | Hover states, focus states, and highlights |
-| Text            | `#2f2f2f` | Main text                                  |
-| Muted text      | `#6b6b6b` | Secondary text                             |
+| Token           | Color              | Usage                              |
+| --------------- | ------------------ | ---------------------------------- |
+| Background      | `#ffffff`          | Main page background               |
+| Surface         | neutral gray tones | Cards, inputs, and secondary areas |
+| Primary         | `#000000`          | Buttons, active states, emphasis   |
+| Text            | neutral black      | Main text                          |
+| Muted text      | neutral gray       | Secondary text                     |
 
 The interface uses a centered `900px` container to keep the layout readable and consistent.
+
+Typography:
+
+- **Sora** for headings, logo, and important UI labels
+- **Inter** for body text and general interface content
+
+---
+
+## Architecture
+
+The application follows a layered structure:
+
+```txt
+Browser
+  ↓
+chi router
+  ↓
+HTTP handlers
+  ↓
+services
+  ↓
+repositories
+  ↓
+PostgreSQL
+```
+
+The goal is to keep responsibilities separated:
+
+- **handlers** deal with HTTP requests, forms, redirects, and responses;
+- **services** handle business rules;
+- **repositories** handle database access and SQL;
+- **templates** render HTML pages;
+- **config** centralizes environment-based configuration;
+- **database** manages the PostgreSQL connection.
 
 ---
 
 ## Project Structure
 
 ```txt
-pastebox/
-├── github_assets/
-│   ├── pasteboxdesktop.gif
-│   └── pasteboxmobile.gif
-├── accounts/
-│   ├── migrations/
-│   ├── admin.py
-│   ├── apps.py
-│   ├── models.py
-│   ├── tests.py
-│   ├── urls.py
-│   └── views.py
-├── config/
-│   ├── settings.py
-│   ├── urls.py
-│   ├── asgi.py
-│   └── wsgi.py
-├── pastes/
-│   ├── migrations/
-│   ├── admin.py
-│   ├── apps.py
-│   ├── forms.py
-│   ├── models.py
-│   ├── tests.py
-│   ├── urls.py
-│   └── views.py
-├── static/
-│   ├── src/
-│   │   └── input.css
-│   └── css/
-│       └── output.css
-├── templates/
-│   ├── base.html
-│   ├── partials/
-│   │   ├── messages.html
-│   │   └── navbar.html
-│   ├── accounts/
-│   │   ├── login.html
-│   │   └── register.html
-│   └── pastes/
-│       ├── paste_form.html
-│       ├── paste_list.html
-│       ├── paste_public_detail.html
-│       └── partials/
-│           ├── pagination.html
-│           ├── paste_card.html
-│           └── paste_filter_form.html
-├── compose.yml
-├── Dockerfile
-├── manage.py
-├── package.json
-├── package-lock.json
-├── requirements.txt
+pastebox-web/
+├── cmd/
+│   └── web/
+│       └── main.go
+├── internal/
+│   ├── config/
+│   │   └── config.go
+│   ├── database/
+│   │   └── database.go
+│   ├── paste/
+│   │   ├── handler.go
+│   │   ├── service.go
+│   │   ├── repository.go
+│   │   ├── model.go
+│   │   └── errors.go
+│   └── render/
+│       └── render.go
+├── migrations/
+├── ui/
+│   └── templates/
+│       ├── layouts/
+│       │   └── base.html
+│       └── pages/
+│           ├── home.html
+│           ├── new.html
+│           └── edit.html
+├── docker-compose.yml
 ├── .env.example
-├── .gitattributes
 ├── .gitignore
+├── go.mod
+├── go.sum
 └── README.md
 ```
 
@@ -157,10 +163,11 @@ pastebox/
 
 ## Requirements
 
-* Docker
-* Docker Compose
-
-The application runs inside Docker containers, so Python, PostgreSQL, and Node.js do not need to be installed directly on the host machine.
+- Go
+- Docker
+- Docker Compose
+- PostgreSQL client tools
+- golang-migrate
 
 ---
 
@@ -169,243 +176,126 @@ The application runs inside Docker containers, so Python, PostgreSQL, and Node.j
 Clone the repository:
 
 ```bash
-git clone git@github.com:lucasmirandalm/pastebox.git
+git clone git@github.com:lucasmirandalm/pastebox-web.git
 ```
 
 Enter the project folder:
 
 ```bash
-cd pastebox
+cd pastebox-web
 ```
 
-Create the local environment file:
+Install Go dependencies:
 
 ```bash
-cp .env.example .env
+go mod download
 ```
 
-Build the containers:
+Run the application:
 
 ```bash
-docker compose build
+go run ./cmd/web
 ```
 
-Start the application:
-
-```bash
-docker compose up
-```
-
-Open Pastebox:
+Open Pastebox Web:
 
 ```txt
-http://localhost:8000
+http://localhost:8080
 ```
 
 ---
 
 ## Environment Variables
 
-The `.env.example` file contains the variables required by the application.
+The application will use a `.env` file during development.
+
+Example:
 
 ```env
-POSTGRES_DB=pastebox
-POSTGRES_USER=pastebox_user
-POSTGRES_PASSWORD=pastebox_password
-POSTGRES_HOST=db
-POSTGRES_PORT=5432
-POSTGRES_EXTERNAL_PORT=5433
+PORT=8080
+DATABASE_URL=postgres://pastebox_user:pastebox_password@127.0.0.1:5435/pastebox_web?sslmode=disable
 ```
 
-`POSTGRES_PORT` is used for communication between the Django and PostgreSQL containers.
+Variables:
 
-`POSTGRES_EXTERNAL_PORT` exposes PostgreSQL to the host machine and can be changed when port `5432` is already in use.
+| Name           | Description                  |
+| -------------- | ---------------------------- |
+| `PORT`         | HTTP server port             |
+| `DATABASE_URL` | PostgreSQL connection string |
 
 ---
 
-## Database Setup
+## Database
 
-Run the migrations:
+During development, PostgreSQL will run through Docker Compose.
 
-```bash
-docker compose run --rm web python manage.py migrate
-```
-
-Create a superuser:
+Planned local database setup:
 
 ```bash
-docker compose run --rm web python manage.py createsuperuser
+docker compose up -d
 ```
 
-Access the Django Admin:
+Run migrations:
+
+```bash
+migrate -path migrations -database "$DATABASE_URL" up
+```
+
+Rollback migrations:
+
+```bash
+migrate -path migrations -database "$DATABASE_URL" down
+```
+
+---
+
+## Main Routes
+
+Planned routes:
 
 ```txt
-http://localhost:8000/admin/
+GET  /                         paste library
+GET  /pastes/new               new paste form
+POST /pastes                   create paste
+GET  /pastes/{id}/edit         edit paste form
+POST /pastes/{id}              update paste
+POST /pastes/{id}/favorite     toggle favorite
+POST /pastes/{id}/delete       delete paste
+GET  /login                    login form
+POST /login                    login user
+POST /logout                   logout user
+GET  /register                 registration form
+POST /register                 create account
+GET  /p/{public_id}            public read-only paste
 ```
 
 ---
 
-## Tailwind CSS
+## Learning Goals
 
-Pastebox uses Tailwind CSS through a dedicated Docker service.
+This project is being built to practice professional backend development with Go, including:
 
-The Tailwind source file is located at:
-
-```txt
-static/src/input.css
-```
-
-The generated CSS file is located at:
-
-```txt
-static/css/output.css
-```
-
-During development, the Tailwind container runs in watch mode and recompiles the stylesheet when templates or source styles change.
-
----
-
-## Usage
-
-Start all application services:
-
-```bash
-docker compose up
-```
-
-Useful URLs:
-
-```txt
-http://localhost:8000/
-http://localhost:8000/register/
-http://localhost:8000/login/
-http://localhost:8000/admin/
-```
-
-The authenticated dashboard includes:
-
-* text search
-* favorite filtering
-* paste listing
-* pagination
-* paste creation
-* paste editing
-* paste deletion
-* favorite and unfavorite actions
-* public link sharing
-
----
-
-## Authentication and Permissions
-
-Pastebox uses Django's built-in authentication and session system.
-
-Private views require authentication, and all private paste queries are restricted by the current user:
-
-```python
-Paste.objects.filter(owner=request.user)
-```
-
-Update, favorite, and delete operations also verify ownership before changing a paste.
-
-This prevents users from viewing or modifying another user's private pastes.
-
----
-
-## Public Links
-
-Each paste receives a unique public UUID.
-
-Public links can be opened without authentication and display a read-only version of the paste.
-
-When a paste is edited and saved, Pastebox generates a new public slug. As a result:
-
-* the previous public link becomes invalid;
-* the newest public link becomes active;
-* favorite and unfavorite actions do not change the public link.
-
----
-
-## Running Tests
-
-Pastebox includes **12 essential automated tests** covering its main models, permissions, business rules, and views.
-
-Run the complete test suite:
-
-```bash
-docker compose run --rm web python manage.py test
-```
-
-Run only the tests from the `pastes` app:
-
-```bash
-docker compose run --rm web python manage.py test pastes
-```
-
-Run the tests with detailed output:
-
-```bash
-docker compose run --rm web python manage.py test pastes -v 2
-```
-
-If Docker requires elevated permissions on your machine:
-
-```bash
-sudo docker compose run --rm web python manage.py test
-```
-
-### Test coverage
-
-The test suite verifies that:
-
-* the string representation of a paste returns its title;
-* a public slug is generated automatically;
-* users only see their own private pastes;
-* authenticated users can create pastes;
-* unauthenticated users cannot create pastes;
-* paste owners can update their own pastes;
-* users cannot update another user's paste;
-* updating a paste generates a new public slug;
-* favoriting changes only the favorite status;
-* paste owners can delete their own pastes;
-* public paste pages are accessible without login;
-* text search and favorite filtering work together.
-
-The Django test runner creates a temporary test database and destroys it after the suite finishes. Tests do not modify the development database.
-
----
-
-## Why I Built This
-
-I built Pastebox as a Django learning project to practice:
-
-* pure Django development
-* PostgreSQL integration
-* Docker-based environments
-* Tailwind CSS styling
-* authentication and authorization
-* session-based login
-* ownership and permissions
-* Django models and forms
-* class organization
-* reusable template partials
-* Django messages
-* URL routing
-* public UUID links
-* business rules
-* responsive interface design
-* automated model and view testing
-* debugging real application errors
+- HTTP routing with chi
+- server-side rendering with `html/template`
+- PostgreSQL integration
+- SQL migrations
+- form handling
+- validation
+- session-based authentication
+- authorization and ownership rules
+- layered architecture
+- dependency injection
+- error handling
+- testing handlers, services, and repositories
+- building a real web application from start to finish
 
 ---
 
 ## Project Status
 
-Pastebox is complete as a learning project.
+Pastebox Web is currently **in development**.
 
-The implemented scope includes the main application workflow, authentication, paste management, public sharing, responsive design, permissions, and essential automated tests.
-
-Future Django concepts and additional features will be explored in separate projects.
+The project is being built step by step, with a focus on understanding each part of the backend architecture before adding the next layer.
 
 ---
 
@@ -416,426 +306,5 @@ This project is open source and available under the MIT License.
 ---
 
 <p align="center">
-  Built with Django, Tailwind CSS, PostgreSQL, Docker, and a lot of practice.
+  Built with Go, PostgreSQL, Tailwind CSS, Docker, and a lot of practice.
 </p>
-# Pastebox
-
-<p align="center">
-  <strong>A clean paste-sharing web app built with pure Django.</strong>
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Django-Pure%20Django-092E20?style=for-the-badge&logo=django" alt="Django">
-  <img src="https://img.shields.io/badge/Tailwind%20CSS-UI-38B2AC?style=for-the-badge&logo=tailwindcss" alt="Tailwind CSS">
-  <img src="https://img.shields.io/badge/PostgreSQL-Database-4169E1?style=for-the-badge&logo=postgresql" alt="PostgreSQL">
-  <img src="https://img.shields.io/badge/Docker-Environment-2496ED?style=for-the-badge&logo=docker" alt="Docker">
-  <img src="https://img.shields.io/badge/Tests-12%20Passing-brightgreen?style=for-the-badge" alt="12 passing tests">
-</p>
-
----
-
-<table align="center">
-  <tr>
-    <td align="center">
-      <img src="github_assets/pasteboxdesktop.gif" alt="Pastebox desktop demo" width="520">
-      <br>
-      <strong>Desktop</strong>
-    </td>
-    <td align="center">
-      <img src="github_assets/pasteboxmobile.gif" alt="Pastebox mobile demo" width="220">
-      <br>
-      <strong>Mobile</strong>
-    </td>
-  </tr>
-</table>
-
----
-
-## About
-
-**Pastebox** is a paste-sharing web application built with pure Django, Tailwind CSS, PostgreSQL, and Docker.
-
-Users can create private accounts, manage their own text pastes, search and filter their workspace, mark pastes as favorites, and share read-only public links.
-
-Pastebox was developed as a learning-focused Django project with attention to project organization, authentication, permissions, business rules, responsive design, and automated tests.
-
----
-
-## Features
-
-* Pure Django web application
-* PostgreSQL database
-* Docker-based development environment
-* Tailwind CSS interface
-* Custom visual design system
-* Responsive desktop and mobile layouts
-* User registration
-* User login and logout
-* Session-based authentication
-* Protected private paste dashboard
-* Per-user paste ownership
-* Paste creation
-* Paste listing
-* Paste editing
-* Paste deletion
-* Favorite and unfavorite actions
-* Text search
-* Favorite filtering
-* Pagination
-* Public shareable paste links
-* Public read-only paste pages
-* Copy-to-clipboard public links
-* Public slug regeneration after paste updates
-* Old public link invalidation after paste updates
-* Permission-based paste access
-* Django messages for user feedback
-* Automatically dismissed feedback messages
-* Django Admin integration
-* Automated model and view tests
-
----
-
-## Design System
-
-Pastebox uses a clean and minimal visual style.
-
-| Token           | Color     | Usage                                      |
-| --------------- | --------- | ------------------------------------------ |
-| Main background | `#ffffff` | Page background                            |
-| Surface         | `#eeeeee` | Cards, inputs, and secondary areas         |
-| Accent          | `#ffbb11` | Hover states, focus states, and highlights |
-| Text            | `#2f2f2f` | Main text                                  |
-| Muted text      | `#6b6b6b` | Secondary text                             |
-
-The interface uses a centered `900px` container to keep the layout readable and consistent.
-
----
-
-## Project Structure
-
-```txt
-pastebox/
-├── github_assets/
-│   ├── pasteboxdesktop.gif
-│   └── pasteboxmobile.gif
-├── accounts/
-│   ├── migrations/
-│   ├── admin.py
-│   ├── apps.py
-│   ├── models.py
-│   ├── tests.py
-│   ├── urls.py
-│   └── views.py
-├── config/
-│   ├── settings.py
-│   ├── urls.py
-│   ├── asgi.py
-│   └── wsgi.py
-├── pastes/
-│   ├── migrations/
-│   ├── admin.py
-│   ├── apps.py
-│   ├── forms.py
-│   ├── models.py
-│   ├── tests.py
-│   ├── urls.py
-│   └── views.py
-├── static/
-│   ├── src/
-│   │   └── input.css
-│   └── css/
-│       └── output.css
-├── templates/
-│   ├── base.html
-│   ├── partials/
-│   │   ├── messages.html
-│   │   └── navbar.html
-│   ├── accounts/
-│   │   ├── login.html
-│   │   └── register.html
-│   └── pastes/
-│       ├── paste_form.html
-│       ├── paste_list.html
-│       ├── paste_public_detail.html
-│       └── partials/
-│           ├── pagination.html
-│           ├── paste_card.html
-│           └── paste_filter_form.html
-├── compose.yml
-├── Dockerfile
-├── manage.py
-├── package.json
-├── package-lock.json
-├── requirements.txt
-├── .env.example
-├── .gitattributes
-├── .gitignore
-└── README.md
-```
-
----
-
-## Requirements
-
-* Docker
-* Docker Compose
-
-The application runs inside Docker containers, so Python, PostgreSQL, and Node.js do not need to be installed directly on the host machine.
-
----
-
-## Installation
-
-Clone the repository:
-
-```bash
-git clone git@github.com:lucasmirandalm/pastebox.git
-```
-
-Enter the project folder:
-
-```bash
-cd pastebox
-```
-
-Create the local environment file:
-
-```bash
-cp .env.example .env
-```
-
-Build the containers:
-
-```bash
-docker compose build
-```
-
-Start the application:
-
-```bash
-docker compose up
-```
-
-Open Pastebox:
-
-```txt
-http://localhost:8000
-```
-
----
-
-## Environment Variables
-
-The `.env.example` file contains the variables required by the application.
-
-```env
-POSTGRES_DB=pastebox
-POSTGRES_USER=pastebox_user
-POSTGRES_PASSWORD=pastebox_password
-POSTGRES_HOST=db
-POSTGRES_PORT=5432
-POSTGRES_EXTERNAL_PORT=5433
-```
-
-`POSTGRES_PORT` is used for communication between the Django and PostgreSQL containers.
-
-`POSTGRES_EXTERNAL_PORT` exposes PostgreSQL to the host machine and can be changed when port `5432` is already in use.
-
----
-
-## Database Setup
-
-Run the migrations:
-
-```bash
-docker compose run --rm web python manage.py migrate
-```
-
-Create a superuser:
-
-```bash
-docker compose run --rm web python manage.py createsuperuser
-```
-
-Access the Django Admin:
-
-```txt
-http://localhost:8000/admin/
-```
-
----
-
-## Tailwind CSS
-
-Pastebox uses Tailwind CSS through a dedicated Docker service.
-
-The Tailwind source file is located at:
-
-```txt
-static/src/input.css
-```
-
-The generated CSS file is located at:
-
-```txt
-static/css/output.css
-```
-
-During development, the Tailwind container runs in watch mode and recompiles the stylesheet when templates or source styles change.
-
----
-
-## Usage
-
-Start all application services:
-
-```bash
-docker compose up
-```
-
-Useful URLs:
-
-```txt
-http://localhost:8000/
-http://localhost:8000/register/
-http://localhost:8000/login/
-http://localhost:8000/admin/
-```
-
-The authenticated dashboard includes:
-
-* text search
-* favorite filtering
-* paste listing
-* pagination
-* paste creation
-* paste editing
-* paste deletion
-* favorite and unfavorite actions
-* public link sharing
-
----
-
-## Authentication and Permissions
-
-Pastebox uses Django's built-in authentication and session system.
-
-Private views require authentication, and all private paste queries are restricted by the current user:
-
-```python
-Paste.objects.filter(owner=request.user)
-```
-
-Update, favorite, and delete operations also verify ownership before changing a paste.
-
-This prevents users from viewing or modifying another user's private pastes.
-
----
-
-## Public Links
-
-Each paste receives a unique public UUID.
-
-Public links can be opened without authentication and display a read-only version of the paste.
-
-When a paste is edited and saved, Pastebox generates a new public slug. As a result:
-
-* the previous public link becomes invalid;
-* the newest public link becomes active;
-* favorite and unfavorite actions do not change the public link.
-
----
-
-## Running Tests
-
-Pastebox includes **12 essential automated tests** covering its main models, permissions, business rules, and views.
-
-Run the complete test suite:
-
-```bash
-docker compose run --rm web python manage.py test
-```
-
-Run only the tests from the `pastes` app:
-
-```bash
-docker compose run --rm web python manage.py test pastes
-```
-
-Run the tests with detailed output:
-
-```bash
-docker compose run --rm web python manage.py test pastes -v 2
-```
-
-If Docker requires elevated permissions on your machine:
-
-```bash
-sudo docker compose run --rm web python manage.py test
-```
-
-### Test coverage
-
-The test suite verifies that:
-
-* the string representation of a paste returns its title;
-* a public slug is generated automatically;
-* users only see their own private pastes;
-* authenticated users can create pastes;
-* unauthenticated users cannot create pastes;
-* paste owners can update their own pastes;
-* users cannot update another user's paste;
-* updating a paste generates a new public slug;
-* favoriting changes only the favorite status;
-* paste owners can delete their own pastes;
-* public paste pages are accessible without login;
-* text search and favorite filtering work together.
-
-The Django test runner creates a temporary test database and destroys it after the suite finishes. Tests do not modify the development database.
-
----
-
-## Why I Built This
-
-I built Pastebox as a Django learning project to practice:
-
-* pure Django development
-* PostgreSQL integration
-* Docker-based environments
-* Tailwind CSS styling
-* authentication and authorization
-* session-based login
-* ownership and permissions
-* Django models and forms
-* class organization
-* reusable template partials
-* Django messages
-* URL routing
-* public UUID links
-* business rules
-* responsive interface design
-* automated model and view testing
-* debugging real application errors
-
----
-
-## Project Status
-
-Pastebox is complete as a learning project.
-
-The implemented scope includes the main application workflow, authentication, paste management, public sharing, responsive design, permissions, and essential automated tests.
-
-Future Django concepts and additional features will be explored in separate projects.
-
----
-
-## License
-
-This project is open source and available under the MIT License.
-
----
-
-<p align="center">
-  Built with Django, Tailwind CSS, PostgreSQL, Docker, and a lot of practice.
-</p>
-
