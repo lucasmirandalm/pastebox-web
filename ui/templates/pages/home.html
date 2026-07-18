@@ -12,7 +12,11 @@
     </div>
 
     <div class="text-sm text-neutral-500">
-      0 pastes found
+      {{ if eq .TotalPastes 1 }}
+        1 Paste Found
+      {{ else }}
+        {{.TotalPastes}} Pastes Found
+      {{ endif }}
     </div>
   </div>
 

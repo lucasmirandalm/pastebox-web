@@ -1,5 +1,6 @@
 package paste
 
 type HomePageData struct {
-	Title string
+	Title       string
+	TotalPastes int
 }

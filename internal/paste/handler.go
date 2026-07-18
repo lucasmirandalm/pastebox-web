@@ -8,17 +8,28 @@ import (
 
 type PasteHandler struct {
 	renderer *render.Renderer
+	service  *PasteService
 }
 
-func NewPasteHandler(renderer *render.Renderer) *PasteHandler {
+func NewPasteHandler(renderer *render.Renderer, service *PasteService) *PasteHandler {
 	return &PasteHandler{
 		renderer: renderer,
+		service:  service,
 	}
 }
 
 func (ph *PasteHandler) Home(w http.ResponseWriter, r *http.Request) {
+	const userID int64 = 1
+
+	totalPastes, err := ph.service.CountByUserID(r.Context(), userID)
+	if err != nil {
+		http.Error(w, "failed to count pastes", http.StatusInternalServerError)
+		return
+	}
+
 	data := HomePageData{
-		Title: "Pastebox Web",
+		Title:       "Pastebox Web",
+		TotalPastes: totalPastes,
 	}
 
 	ph.renderer.Render(w, http.StatusOK, "home.html", data)

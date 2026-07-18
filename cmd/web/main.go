@@ -34,7 +34,9 @@ func main() {
 		log.Fatalf("failed to load templates: %v", err)
 	}
 
-	pasteHandler := paste.NewPasteHandler(renderer)
+	pasteRepository := paste.NewPasteRepository(db)
+	pasteService := paste.NewPasteService(pasteRepository)
+	pasteHandler := paste.NewPasteHandler(renderer, pasteService)
 
 	r := chi.NewRouter()
 
