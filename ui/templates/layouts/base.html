@@ -1,0 +1,38 @@
+{{define "base"}}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{.Title}}</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-white font-['Inter'] text-neutral-950 antialiased">
+  <header class="border-b border-neutral-200 bg-white">
+    <div class="mx-auto flex max-w-[900px] items-center justify-between px-4 py-4">
+      <a href="/" class="font-['Sora'] text-xl font-semibold tracking-[-0.04em] text-black">
+        Pastebox
+      </a>
+
+      <nav class="flex items-center gap-5 text-sm text-neutral-600">
+        <a href="/" class="font-medium text-black">Pastes</a>
+        <a href="/favorites" class="hover:text-black">Favorites</a>
+        <a href="/pastes/new" class="rounded-full bg-black px-4 py-2 font-semibold text-white hover:bg-neutral-800">
+          New paste
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-[900px] px-4 py-8">
+    {{template "content" .}}
+  </main>
+</body>
+</html>
+{{end}}

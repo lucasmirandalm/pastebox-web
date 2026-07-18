@@ -11,6 +11,8 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/lucasmirandalm/pastebox-web/internal/config"
 	"github.com/lucasmirandalm/pastebox-web/internal/database"
+	"github.com/lucasmirandalm/pastebox-web/internal/paste"
+	"github.com/lucasmirandalm/pastebox-web/internal/render"
 )
 
 func main() {
@@ -27,11 +29,16 @@ func main() {
 	}
 	defer db.Close()
 
+	renderer, err := render.New("ui/templates")
+	if err != nil {
+		log.Fatalf("failed to load templates: %v", err)
+	}
+
+	pasteHandler := paste.NewPasteHandler(renderer)
+
 	r := chi.NewRouter()
 
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "Pastebox is running")
-	})
+	r.Get("/", pasteHandler.Home)
 
 	r.Get("/health/db", func(w http.ResponseWriter, r *http.Request) {
 		ctx, cancel := context.WithTimeout(r.Context(), 2*time.Second)

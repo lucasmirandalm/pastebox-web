@@ -1,0 +1,59 @@
+{{define "content"}}
+<section class="mb-8">
+  <div class="mb-6 flex flex-col gap-4 border-b border-neutral-200 pb-6 md:flex-row md:items-end md:justify-between">
+    <div>
+      <p class="mb-2 font-['Sora'] text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500">
+        Your pastes
+      </p>
+
+      <h1 class="font-['Sora'] text-3xl font-semibold tracking-[-0.05em] text-black">
+        Library
+      </h1>
+    </div>
+
+    <div class="text-sm text-neutral-500">
+      0 pastes found
+    </div>
+  </div>
+
+  <form action="/" method="get" class="mb-5 flex flex-col gap-3 md:flex-row">
+    <input
+      type="search"
+      name="q"
+      placeholder="Search by title or content..."
+      class="h-11 flex-1 rounded-full border border-neutral-300 bg-white px-4 text-sm outline-none placeholder:text-neutral-400 focus:border-black"
+    >
+
+    <button
+      type="submit"
+      class="h-11 rounded-full bg-black px-5 text-sm font-semibold text-white hover:bg-neutral-800"
+    >
+      Search
+    </button>
+  </form>
+
+  <div class="flex items-center gap-2 text-sm">
+    <a href="/" class="rounded-full bg-black px-4 py-2 font-medium text-white">
+      All
+    </a>
+
+    <a href="/?filter=favorites" class="rounded-full border border-neutral-300 px-4 py-2 font-medium text-neutral-700 hover:border-black hover:text-black">
+      Favorites
+    </a>
+  </div>
+</section>
+
+<section class="rounded-2xl border border-neutral-200 bg-neutral-50 p-8 text-center">
+  <h2 class="font-['Sora'] text-lg font-semibold tracking-[-0.03em] text-black">
+    No pastes yet
+  </h2>
+
+  <p class="mt-2 text-sm text-neutral-600">
+    Create your first paste to start building your library.
+  </p>
+
+  <a href="/pastes/new" class="mt-5 inline-flex rounded-full bg-black px-5 py-3 text-sm font-semibold text-white hover:bg-neutral-800">
+    New paste
+  </a>
+</section>
+{{end}}
