@@ -13,10 +13,10 @@
 
     <div class="text-sm text-neutral-500">
       {{ if eq .TotalPastes 1 }}
-        1 Paste Found
+        1 paste found
       {{ else }}
-        {{.TotalPastes}} Pastes Found
-      {{ endif }}
+        {{.TotalPastes}} pastes found
+      {{ end }}
     </div>
   </div>
 
@@ -47,17 +47,45 @@
   </div>
 </section>
 
-<section class="rounded-2xl border border-neutral-200 bg-neutral-50 p-8 text-center">
-  <h2 class="font-['Sora'] text-lg font-semibold tracking-[-0.03em] text-black">
-    No pastes yet
-  </h2>
+{{if .Pastes}}
+  <section class="divide-y divide-neutral-200 rounded-2xl border border-neutral-200 bg-white">
+    {{range .Pastes}}
+      <article class="p-5 transition hover:bg-neutral-50 hover:cursor-pointer">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h2 class="font-['Sora'] text-base font-semibold tracking-[-0.03em] text-black">
+              {{.Title}}
+            </h2>
 
-  <p class="mt-2 text-sm text-neutral-600">
-    Create your first paste to start building your library.
-  </p>
+            <p class="mt-2 line-clamp-2 text-sm leading-6 text-neutral-600">
+              {{.Content}}
+            </p>
 
-  <a href="/pastes/new" class="mt-5 inline-flex rounded-full bg-black px-5 py-3 text-sm font-semibold text-white hover:bg-neutral-800">
-    New paste
-  </a>
-</section>
+            <p class="mt-3 text-xs text-neutral-400">
+              Public link: /p/{{.PublicID}}
+            </p>
+          </div>
+
+          <div class="text-lg text-black">
+            {{if .IsFavorite}}★{{else}}☆{{end}}
+          </div>
+        </div>
+      </article>
+    {{end}}
+  </section>
+{{else}}
+  <section class="rounded-2xl border border-neutral-200 bg-neutral-50 p-8 text-center">
+    <h2 class="font-['Sora'] text-lg font-semibold tracking-[-0.03em] text-black">
+      No pastes yet
+    </h2>
+
+    <p class="mt-2 text-sm text-neutral-600">
+      Create your first paste to start building your library.
+    </p>
+
+    <a href="/pastes/new" class="mt-5 inline-flex rounded-full bg-black px-5 py-3 text-sm font-semibold text-white hover:bg-neutral-800">
+      New paste
+    </a>
+  </section>
+{{end}}
 {{end}}

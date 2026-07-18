@@ -27,9 +27,16 @@ func (ph *PasteHandler) Home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	pastes, err := ph.service.ListByUserID(r.Context(), userID)
+	if err != nil {
+		http.Error(w, "failed to load pastes", http.StatusInternalServerError)
+		return
+	}
+
 	data := HomePageData{
 		Title:       "Pastebox Web",
 		TotalPastes: totalPastes,
+		Pastes:      pastes,
 	}
 
 	ph.renderer.Render(w, http.StatusOK, "home.html", data)
