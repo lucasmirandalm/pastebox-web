@@ -12,3 +12,7 @@ type Paste struct {
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 }
+
+func (p Paste) LastEdited() string {
+	return formatLastEdited(p.UpdatedAt)
+}

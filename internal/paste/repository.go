@@ -67,3 +67,32 @@ func (pr *PasteRepository) ListByUserID(ctx context.Context, userID int64) ([]Pa
 
 	return pastes, nil
 }
+
+func (pr *PasteRepository) FindByID(ctx context.Context, userID int64, pasteID int64) (Paste, error) {
+	var paste Paste
+
+	err := pr.db.QueryRowContext(ctx, `
+		SELECT id, user_id, title, content, is_favorite, public_id, created_at, updated_at
+		FROM pastes
+		WHERE id = $1
+		  AND user_id = $2
+	`, pasteID, userID).Scan(
+		&paste.ID,
+		&paste.UserID,
+		&paste.Title,
+		&paste.Content,
+		&paste.IsFavorite,
+		&paste.PublicID,
+		&paste.CreatedAt,
+		&paste.UpdatedAt,
+	)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return Paste{}, ErrPasteNotFound
+		}
+
+		return Paste{}, err
+	}
+
+	return paste, nil
+}

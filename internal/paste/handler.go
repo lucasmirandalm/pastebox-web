@@ -1,7 +1,7 @@
 package paste
 
 import (
-	"fmt"
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -46,11 +46,24 @@ func (ph *PasteHandler) Home(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ph *PasteHandler) Edit(w http.ResponseWriter, r *http.Request) {
+	const userID int64 = 1
+
 	pasteID, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
 	if err != nil {
 		http.Error(w, "invalid paste id", http.StatusBadRequest)
 		return
 	}
 
-	fmt.Fprintf(w, "Edit paste %d", pasteID)
+	paste, err := ph.service.FindByID(r.Context(), userID, pasteID)
+	if err != nil {
+		if errors.Is(err, ErrPasteNotFound) {
+			http.Error(w, "paste not found", http.StatusNotFound)
+			return
+		}
+
+		http.Error(w, "failed to load paste", http.StatusInternalServerError)
+		return
+	}
+
+	ph.renderer.Render(w, http.StatusOK, "edit.html", paste)
 }
