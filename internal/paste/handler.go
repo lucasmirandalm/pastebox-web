@@ -1,8 +1,11 @@
 package paste
 
 import (
+	"fmt"
 	"net/http"
+	"strconv"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/lucasmirandalm/pastebox-web/internal/render"
 )
 
@@ -40,4 +43,14 @@ func (ph *PasteHandler) Home(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ph.renderer.Render(w, http.StatusOK, "home.html", data)
+}
+
+func (ph *PasteHandler) Edit(w http.ResponseWriter, r *http.Request) {
+	pasteID, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
+	if err != nil {
+		http.Error(w, "invalid paste id", http.StatusBadRequest)
+		return
+	}
+
+	fmt.Fprintf(w, "Edit paste %d", pasteID)
 }

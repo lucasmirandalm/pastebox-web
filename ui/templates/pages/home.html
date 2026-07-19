@@ -20,7 +20,7 @@
     </div>
   </div>
 
-  <form action="/" method="get" class="mb-5 flex flex-col gap-3 md:flex-row">
+  <form action="/pastes" method="get" class="mb-5 flex flex-col gap-3 md:flex-row">
     <input
       type="search"
       name="q"
@@ -37,11 +37,11 @@
   </form>
 
   <div class="flex items-center gap-2 text-sm">
-    <a href="/" class="rounded-full bg-black px-4 py-2 font-medium text-white">
+    <a href="/pastes" class="rounded-full bg-black px-4 py-2 font-medium text-white">
       All
     </a>
 
-    <a href="/?filter=favorites" class="rounded-full border border-neutral-300 px-4 py-2 font-medium text-neutral-700 hover:border-black hover:text-black">
+    <a href="/pastes?filter=favorites" class="rounded-full border border-neutral-300 px-4 py-2 font-medium text-neutral-700 hover:border-black hover:text-black">
       Favorites
     </a>
   </div>

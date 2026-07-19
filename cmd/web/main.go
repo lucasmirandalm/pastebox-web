@@ -40,7 +40,11 @@ func main() {
 
 	r := chi.NewRouter()
 
-	r.Get("/", pasteHandler.Home)
+	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, "/pastes", http.StatusSeeOther)
+	})
+	r.Get("/pastes", pasteHandler.Home)
+	r.Get("/pastes/{id}/edit", pasteHandler.Edit)
 
 	r.Get("/health/db", func(w http.ResponseWriter, r *http.Request) {
 		ctx, cancel := context.WithTimeout(r.Context(), 2*time.Second)

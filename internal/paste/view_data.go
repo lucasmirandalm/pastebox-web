@@ -5,3 +5,6 @@ type HomePageData struct {
 	TotalPastes int
 	Pastes      []Paste
 }
+
+type EditPageData struct {
+}
