@@ -96,3 +96,44 @@ func (pr *PasteRepository) FindByID(ctx context.Context, userID int64, pasteID i
 
 	return paste, nil
 }
+
+func (pr *PasteRepository) Update(
+	ctx context.Context,
+	userID int64,
+	pasteID int64,
+	title string,
+	content string,
+	isFavorite bool,
+) (Paste, error) {
+	var paste Paste
+
+	err := pr.db.QueryRowContext(ctx, `
+		UPDATE pastes
+		SET
+			title = $3,
+			content = $4,
+			is_favorite = $5,
+			updated_at = now()
+		WHERE id = $1
+		  AND user_id = $2
+		RETURNING id, user_id, title, content, is_favorite, public_id, created_at, updated_at
+	`, pasteID, userID, title, content, isFavorite).Scan(
+		&paste.ID,
+		&paste.UserID,
+		&paste.Title,
+		&paste.Content,
+		&paste.IsFavorite,
+		&paste.PublicID,
+		&paste.CreatedAt,
+		&paste.UpdatedAt,
+	)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return Paste{}, ErrPasteNotFound
+		}
+
+		return Paste{}, err
+	}
+
+	return paste, nil
+}

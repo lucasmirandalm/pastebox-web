@@ -67,3 +67,45 @@ func (ph *PasteHandler) Edit(w http.ResponseWriter, r *http.Request) {
 
 	ph.renderer.Render(w, http.StatusOK, "edit.html", paste)
 }
+
+func (ph *PasteHandler) Update(w http.ResponseWriter, r *http.Request) {
+	const userID int64 = 1
+
+	pasteID, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
+	if err != nil {
+		http.Error(w, "invalid paste id", http.StatusBadRequest)
+		return
+	}
+
+	title := r.FormValue("title")
+	content := r.FormValue("content")
+	isFavorite := r.FormValue("is_favorite") == "on"
+
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "invalid form data", http.StatusBadRequest)
+		return
+	}
+
+	_, err = ph.service.Update(r.Context(), userID, pasteID, title, content, isFavorite)
+	if err != nil {
+		if errors.Is(err, ErrPasteNotFound) {
+			http.Error(w, "paste not found", http.StatusNotFound)
+			return
+		}
+
+		if errors.Is(err, ErrPasteTitleRequired) {
+			http.Error(w, "title is required", http.StatusBadRequest)
+			return
+		}
+
+		if errors.Is(err, ErrPasteContentRequired) {
+			http.Error(w, "content is required", http.StatusBadRequest)
+			return
+		}
+
+		http.Error(w, "failed to update paste", http.StatusInternalServerError)
+		return
+	}
+
+	http.Redirect(w, r, "/pastes/"+strconv.FormatInt(pasteID, 10)+"/edit", http.StatusSeeOther)
+}
