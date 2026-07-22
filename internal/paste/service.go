@@ -19,8 +19,8 @@ func (ps *PasteService) CountByUserID(ctx context.Context, userID int64) (int, e
 	return ps.repository.CountByUserID(ctx, userID)
 }
 
-func (ps *PasteService) ListByUserID(ctx context.Context, userID int64) ([]Paste, error) {
-	return ps.repository.ListByUserID(ctx, userID)
+func (ps *PasteService) ListByUserID(ctx context.Context, userID int64, onlyFavorites bool) ([]Paste, error) {
+	return ps.repository.ListByUserID(ctx, userID, onlyFavorites)
 }
 
 func (ps *PasteService) FindByID(ctx context.Context, userID, pasteID int64) (Paste, error) {

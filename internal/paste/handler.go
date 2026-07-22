@@ -24,22 +24,26 @@ func NewPasteHandler(renderer *render.Renderer, service *PasteService) *PasteHan
 func (ph *PasteHandler) Home(w http.ResponseWriter, r *http.Request) {
 	const userID int64 = 1
 
+	filter := r.URL.Query().Get("filter")
+	onlyFavorites := filter == "favorites"
+
 	totalPastes, err := ph.service.CountByUserID(r.Context(), userID)
 	if err != nil {
 		http.Error(w, "failed to count pastes", http.StatusInternalServerError)
 		return
 	}
 
-	pastes, err := ph.service.ListByUserID(r.Context(), userID)
+	pastes, err := ph.service.ListByUserID(r.Context(), userID, onlyFavorites)
 	if err != nil {
 		http.Error(w, "failed to load pastes", http.StatusInternalServerError)
 		return
 	}
 
 	data := HomePageData{
-		Title:       "Pastebox Web",
-		TotalPastes: totalPastes,
-		Pastes:      pastes,
+		Title:         "Pastebox Web",
+		TotalPastes:   totalPastes,
+		Pastes:        pastes,
+		OnlyFavorites: onlyFavorites,
 	}
 
 	ph.renderer.Render(w, http.StatusOK, "home.html", data)

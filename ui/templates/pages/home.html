@@ -46,14 +46,24 @@
   <div class="flex items-center gap-2 text-sm">
     <a
       href="/pastes"
+      {{if
+      .OnlyFavorites}}
+      class="rounded-full border border-neutral-300 px-4 py-2 font-medium text-neutral-700 hover:border-black hover:text-black"
+      {{else}}
       class="rounded-full bg-black px-4 py-2 font-medium text-white"
+      {{end}}
     >
       All
     </a>
 
     <a
       href="/pastes?filter=favorites"
+      {{if
+      .OnlyFavorites}}
+      class="rounded-full bg-black px-4 py-2 font-medium text-white"
+      {{else}}
       class="rounded-full border border-neutral-300 px-4 py-2 font-medium text-neutral-700 hover:border-black hover:text-black"
+      {{end}}
     >
       Favorites
     </a>

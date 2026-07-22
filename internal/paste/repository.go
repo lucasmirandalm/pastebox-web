@@ -26,14 +26,15 @@ func (pr *PasteRepository) CountByUserID(ctx context.Context, userID int64) (int
 	return total, nil
 }
 
-func (pr *PasteRepository) ListByUserID(ctx context.Context, userID int64) ([]Paste, error) {
+func (pr *PasteRepository) ListByUserID(ctx context.Context, userID int64, onlyFavorites bool) ([]Paste, error) {
 	rows, err := pr.db.QueryContext(ctx, `
 		SELECT id, user_id, title, content, is_favorite, public_id, created_at, updated_at
 		FROM pastes
 		WHERE user_id = $1
+		  AND ($2 = false OR is_favorite = true)
 		ORDER BY updated_at DESC, id DESC
 		LIMIT 10
-	`, userID)
+	`, userID, onlyFavorites)
 	if err != nil {
 		return nil, err
 	}

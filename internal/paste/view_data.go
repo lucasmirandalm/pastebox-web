@@ -1,9 +1,10 @@
 package paste
 
 type HomePageData struct {
-	Title       string
-	TotalPastes int
-	Pastes      []Paste
+	Title         string
+	TotalPastes   int
+	Pastes        []Paste
+	OnlyFavorites bool
 }
 
 type EditPageData struct {
