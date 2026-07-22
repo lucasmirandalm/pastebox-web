@@ -137,3 +137,34 @@ func (pr *PasteRepository) Update(
 
 	return paste, nil
 }
+
+func (pr *PasteRepository) Create(
+	ctx context.Context,
+	userID int64,
+	title string,
+	content string,
+	publicID string,
+) (Paste, error) {
+	var paste Paste
+
+	err := pr.db.QueryRowContext(ctx, `
+	   INSERT INTO pastes (user_id, title, content, public_id)
+	   VALUES ($1, $2, $3, $4)
+	   RETURNING id, user_id, title, content, is_favorite, public_id, created_at, updated_at
+	`, userID, title, content, publicID).Scan(
+		&paste.ID,
+		&paste.UserID,
+		&paste.Title,
+		&paste.Content,
+		&paste.IsFavorite,
+		&paste.PublicID,
+		&paste.CreatedAt,
+		&paste.UpdatedAt,
+	)
+
+	if err != nil {
+		return Paste{}, err
+	}
+
+	return paste, nil
+}

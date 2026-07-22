@@ -44,8 +44,10 @@ func main() {
 		http.Redirect(w, r, "/pastes", http.StatusSeeOther)
 	})
 	r.Get("/pastes", pasteHandler.Home)
+	r.Get("/pastes/new", pasteHandler.New)
 	r.Get("/pastes/{id}/edit", pasteHandler.Edit)
 	r.Post("/pastes/{id}", pasteHandler.Update)
+	r.Post("/pastes", pasteHandler.Create)
 
 	r.Get("/health/db", func(w http.ResponseWriter, r *http.Request) {
 		ctx, cancel := context.WithTimeout(r.Context(), 2*time.Second)

@@ -11,3 +11,9 @@ type EditPageData struct {
 	Paste Paste
 	Error string
 }
+
+type NewPageData struct {
+	Title string
+	Paste Paste
+	Error string
+}

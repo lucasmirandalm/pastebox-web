@@ -45,3 +45,28 @@ func (ps *PasteService) Update(
 
 	return ps.repository.Update(ctx, userID, pasteID, title, content, isFavorite)
 }
+
+func (ps *PasteService) Create(
+	ctx context.Context,
+	userID int64,
+	title string,
+	content string,
+) (Paste, error) {
+	title = strings.TrimSpace(title)
+	content = strings.TrimSpace(content)
+
+	if title == "" {
+		return Paste{}, ErrPasteTitleRequired
+	}
+
+	if content == "" {
+		return Paste{}, ErrPasteContentRequired
+	}
+
+	publicID, err := generatePublicID()
+	if err != nil {
+		return Paste{}, err
+	}
+
+	return ps.repository.Create(ctx, userID, title, content, publicID)
+}

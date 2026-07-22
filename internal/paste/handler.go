@@ -129,3 +129,47 @@ func (ph *PasteHandler) Update(w http.ResponseWriter, r *http.Request) {
 
 	http.Redirect(w, r, "/pastes/"+strconv.FormatInt(pasteID, 10)+"/edit", http.StatusSeeOther)
 }
+
+func (ph *PasteHandler) New(w http.ResponseWriter, r *http.Request) {
+	ph.renderNewForm(w, http.StatusOK, Paste{}, "")
+}
+
+func (ph *PasteHandler) Create(w http.ResponseWriter, r *http.Request) {
+	const userID int64 = 1
+
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "invalid form data", http.StatusBadRequest)
+		return
+	}
+
+	title := r.FormValue("title")
+	content := r.FormValue("content")
+
+	paste, err := ph.service.Create(r.Context(), userID, title, content)
+	if err != nil {
+		if errors.Is(err, ErrPasteTitleRequired) || errors.Is(err, ErrPasteContentRequired) {
+			formPaste := Paste{
+				Title:   title,
+				Content: content,
+			}
+
+			errorMessage := "Please check the form fields."
+
+			if errors.Is(err, ErrPasteTitleRequired) {
+				errorMessage = "Title is required."
+			}
+
+			if errors.Is(err, ErrPasteContentRequired) {
+				errorMessage = "Content is required."
+			}
+
+			ph.renderNewForm(w, http.StatusBadRequest, formPaste, errorMessage)
+			return
+		}
+
+		http.Error(w, "failed to create paste", http.StatusInternalServerError)
+		return
+	}
+
+	http.Redirect(w, r, "/pastes/"+strconv.FormatInt(paste.ID, 10)+"/edit", http.StatusSeeOther)
+}
