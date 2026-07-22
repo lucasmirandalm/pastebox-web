@@ -17,11 +17,19 @@
   </p>
 
   <p class="mt-2 break-all font-mono text-sm text-black">
-    /p/{{.PublicID}}
+    /p/{{.Paste.PublicID}}
   </p>
 </section>
 
-<form action="/pastes/{{.ID}}" method="post" class="space-y-5">
+{{if .Error}}
+  <section class="mb-6 rounded-2xl border border-neutral-300 bg-neutral-50 p-4">
+    <p class="text-sm font-medium text-black">
+      {{.Error}}
+    </p>
+  </section>
+{{end}}
+
+<form action="/pastes/{{.Paste.ID}}" method="post" class="space-y-5">
   <div>
     <label for="title" class="mb-2 block text-sm font-medium text-neutral-700">
       Title
@@ -31,7 +39,7 @@
       id="title"
       name="title"
       type="text"
-      value="{{.Title}}"
+      value="{{.Paste.Title}}"
       class="h-11 w-full rounded-xl border border-neutral-300 bg-white px-4 text-sm outline-none placeholder:text-neutral-400 focus:border-black"
     >
   </div>
@@ -46,7 +54,7 @@
       name="content"
       rows="16"
       class="w-full resize-y rounded-xl border border-neutral-300 bg-white px-4 py-3 font-mono text-sm leading-6 outline-none placeholder:text-neutral-400 focus:border-black"
-    >{{.Content}}</textarea>
+    >{{.Paste.Content}}</textarea>
   </div>
 
   <label
@@ -57,7 +65,7 @@
       id="is_favorite"
       name="is_favorite"
       type="checkbox"
-      {{if .IsFavorite}}checked{{end}}
+      {{if .Paste.IsFavorite}}checked{{end}}
       class="peer sr-only"
     >
 

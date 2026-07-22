@@ -65,7 +65,7 @@ func (ph *PasteHandler) Edit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ph.renderer.Render(w, http.StatusOK, "edit.html", paste)
+	ph.renderEditForm(w, http.StatusOK, paste, "")
 }
 
 func (ph *PasteHandler) Update(w http.ResponseWriter, r *http.Request) {
@@ -77,14 +77,14 @@ func (ph *PasteHandler) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	title := r.FormValue("title")
-	content := r.FormValue("content")
-	isFavorite := r.FormValue("is_favorite") == "on"
-
 	if err := r.ParseForm(); err != nil {
 		http.Error(w, "invalid form data", http.StatusBadRequest)
 		return
 	}
+
+	title := r.FormValue("title")
+	content := r.FormValue("content")
+	isFavorite := r.FormValue("is_favorite") == "on"
 
 	_, err = ph.service.Update(r.Context(), userID, pasteID, title, content, isFavorite)
 	if err != nil {
@@ -93,13 +93,33 @@ func (ph *PasteHandler) Update(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		if errors.Is(err, ErrPasteTitleRequired) {
-			http.Error(w, "title is required", http.StatusBadRequest)
-			return
-		}
+		if errors.Is(err, ErrPasteTitleRequired) || errors.Is(err, ErrPasteContentRequired) {
+			paste, findErr := ph.service.FindByID(r.Context(), userID, pasteID)
+			if findErr != nil {
+				if errors.Is(findErr, ErrPasteNotFound) {
+					http.Error(w, "paste not found", http.StatusNotFound)
+					return
+				}
 
-		if errors.Is(err, ErrPasteContentRequired) {
-			http.Error(w, "content is required", http.StatusBadRequest)
+				http.Error(w, "failed to load paste", http.StatusInternalServerError)
+				return
+			}
+
+			paste.Title = title
+			paste.Content = content
+			paste.IsFavorite = isFavorite
+
+			errorMessage := "Please check the form fields."
+
+			if errors.Is(err, ErrPasteTitleRequired) {
+				errorMessage = "Title is required."
+			}
+
+			if errors.Is(err, ErrPasteContentRequired) {
+				errorMessage = "Content is required."
+			}
+
+			ph.renderEditForm(w, http.StatusBadRequest, paste, errorMessage)
 			return
 		}
 
