@@ -5,6 +5,9 @@ type HomePageData struct {
 	TotalPastes   int
 	Pastes        []Paste
 	OnlyFavorites bool
+	Search        string
+	AllURL        string
+	FavoritesURL  string
 }
 
 type EditPageData struct {

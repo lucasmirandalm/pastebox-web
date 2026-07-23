@@ -15,12 +15,20 @@ func NewPasteRepository(db *sql.DB) *PasteRepository {
 	}
 }
 
-func (pr *PasteRepository) CountByUserID(ctx context.Context, userID int64, onlyFavorites bool) (int, error) {
+func (pr *PasteRepository) CountByUserID(ctx context.Context, userID int64, onlyFavorites bool, search string) (int, error) {
 	var total int
 
 	err := pr.db.QueryRowContext(ctx, `
-	SELECT COUNT(*) FROM pastes WHERE user_id = $1 AND ($2 = false OR is_favorite = true)
-	`, userID, onlyFavorites).Scan(&total)
+		SELECT COUNT(*)
+		FROM pastes
+		WHERE user_id = $1
+		  AND ($2 = false OR is_favorite = true)
+		  AND (
+		    $3 = ''
+		    OR title ILIKE '%' || $3 || '%'
+		    OR content ILIKE '%' || $3 || '%'
+		  )
+	`, userID, onlyFavorites, search).Scan(&total)
 	if err != nil {
 		return 0, err
 	}
@@ -28,15 +36,20 @@ func (pr *PasteRepository) CountByUserID(ctx context.Context, userID int64, only
 	return total, nil
 }
 
-func (pr *PasteRepository) ListByUserID(ctx context.Context, userID int64, onlyFavorites bool) ([]Paste, error) {
+func (pr *PasteRepository) ListByUserID(ctx context.Context, userID int64, onlyFavorites bool, search string) ([]Paste, error) {
 	rows, err := pr.db.QueryContext(ctx, `
 		SELECT id, user_id, title, content, is_favorite, public_id, created_at, updated_at
 		FROM pastes
 		WHERE user_id = $1
 		  AND ($2 = false OR is_favorite = true)
+		  AND (
+		    $3 = ''
+		    OR title ILIKE '%' || $3 || '%'
+		    OR content ILIKE '%' || $3 || '%'
+		  )
 		ORDER BY updated_at DESC, id DESC
 		LIMIT 10
-	`, userID, onlyFavorites)
+	`, userID, onlyFavorites, search)
 	if err != nil {
 		return nil, err
 	}

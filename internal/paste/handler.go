@@ -27,13 +27,15 @@ func (ph *PasteHandler) Home(w http.ResponseWriter, r *http.Request) {
 	filter := r.URL.Query().Get("filter")
 	onlyFavorites := filter == "favorites"
 
-	totalPastes, err := ph.service.CountByUserID(r.Context(), userID, onlyFavorites)
+	search := r.URL.Query().Get("q")
+
+	totalPastes, err := ph.service.CountByUserID(r.Context(), userID, onlyFavorites, search)
 	if err != nil {
 		http.Error(w, "failed to count pastes", http.StatusInternalServerError)
 		return
 	}
 
-	pastes, err := ph.service.ListByUserID(r.Context(), userID, onlyFavorites)
+	pastes, err := ph.service.ListByUserID(r.Context(), userID, onlyFavorites, search)
 	if err != nil {
 		http.Error(w, "failed to load pastes", http.StatusInternalServerError)
 		return
@@ -44,6 +46,9 @@ func (ph *PasteHandler) Home(w http.ResponseWriter, r *http.Request) {
 		TotalPastes:   totalPastes,
 		Pastes:        pastes,
 		OnlyFavorites: onlyFavorites,
+		Search:        search,
+		AllURL:        buildPastesURL(false, search),
+		FavoritesURL:  buildPastesURL(true, search),
 	}
 
 	ph.renderer.Render(w, http.StatusOK, "home.html", data)

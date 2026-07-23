@@ -2,6 +2,8 @@ package paste
 
 import (
 	"fmt"
+	"net/url"
+	"strings"
 	"time"
 )
 
@@ -39,4 +41,24 @@ func formatLastEdited(t time.Time) string {
 	days := int(duration.Hours() / 24)
 
 	return fmt.Sprintf("%d days ago", days)
+}
+
+func buildPastesURL(onlyFavorites bool, search string) string {
+	values := url.Values{}
+
+	if onlyFavorites {
+		values.Set("filter", "favorites")
+	}
+
+	search = strings.TrimSpace(search)
+	if search != "" {
+		values.Set("q", search)
+	}
+
+	query := values.Encode()
+	if query == "" {
+		return "/pastes"
+	}
+
+	return "/pastes?" + query
 }
