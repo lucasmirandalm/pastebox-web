@@ -72,3 +72,13 @@ func (ps *PasteService) Create(
 
 	return ps.repository.Create(ctx, userID, title, content, publicID)
 }
+
+func (ps *PasteService) FindByPublicID(ctx context.Context, publicID string) (Paste, error) {
+	publicID = strings.TrimSpace(publicID)
+
+	if publicID == "" {
+		return Paste{}, ErrPasteNotFound
+	}
+
+	return ps.repository.FindByPublicID(ctx, publicID)
+}

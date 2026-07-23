@@ -184,3 +184,31 @@ func (pr *PasteRepository) Create(
 
 	return paste, nil
 }
+
+func (pr *PasteRepository) FindByPublicID(ctx context.Context, publicID string) (Paste, error) {
+	var paste Paste
+
+	err := pr.db.QueryRowContext(ctx, `
+		SELECT id, user_id, title, content, is_favorite, public_id, created_at, updated_at 
+		FROM pastes 
+		WHERE public_id=$1
+	`, publicID).Scan(
+		&paste.ID,
+		&paste.UserID,
+		&paste.Title,
+		&paste.Content,
+		&paste.IsFavorite,
+		&paste.PublicID,
+		&paste.CreatedAt,
+		&paste.UpdatedAt,
+	)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return Paste{}, ErrPasteNotFound
+		}
+
+		return Paste{}, err
+	}
+
+	return paste, nil
+}

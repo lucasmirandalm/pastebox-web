@@ -21,3 +21,8 @@ type NewPageData struct {
 	Paste Paste
 	Error string
 }
+
+type PublicPageData struct {
+	Title string
+	Paste Paste
+}

@@ -182,3 +182,25 @@ func (ph *PasteHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 	http.Redirect(w, r, "/pastes/"+strconv.FormatInt(paste.ID, 10)+"/edit", http.StatusSeeOther)
 }
+
+func (ph *PasteHandler) Public(w http.ResponseWriter, r *http.Request) {
+	publicID := chi.URLParam(r, "publicID")
+
+	paste, err := ph.service.FindByPublicID(r.Context(), publicID)
+	if err != nil {
+		if errors.Is(err, ErrPasteNotFound) {
+			http.Error(w, "paste not found", http.StatusNotFound)
+			return
+		}
+
+		http.Error(w, "failed to load paste", http.StatusInternalServerError)
+		return
+	}
+
+	data := PublicPageData{
+		Title: paste.Title + " · Pastebox",
+		Paste: paste,
+	}
+
+	ph.renderer.Render(w, http.StatusOK, "public.html", data)
+}
