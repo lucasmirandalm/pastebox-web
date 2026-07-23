@@ -18,8 +18,10 @@
     </div>
 
     <div class="text-sm text-neutral-500">
-      {{ if eq .TotalPastes 1 }} 1 paste found {{ else }} {{.TotalPastes}}
-      pastes found {{ end }}
+      {{if .OnlyFavorites}} {{if eq .TotalPastes 1}} 1 favorite paste found
+      {{else}} {{.TotalPastes}} favorite pastes found {{end}} {{else}} {{if eq
+      .TotalPastes 1}} 1 paste found {{else}} {{.TotalPastes}} pastes found
+      {{end}} {{end}}
     </div>
   </div>
 

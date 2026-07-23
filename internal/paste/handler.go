@@ -27,7 +27,7 @@ func (ph *PasteHandler) Home(w http.ResponseWriter, r *http.Request) {
 	filter := r.URL.Query().Get("filter")
 	onlyFavorites := filter == "favorites"
 
-	totalPastes, err := ph.service.CountByUserID(r.Context(), userID)
+	totalPastes, err := ph.service.CountByUserID(r.Context(), userID, onlyFavorites)
 	if err != nil {
 		http.Error(w, "failed to count pastes", http.StatusInternalServerError)
 		return

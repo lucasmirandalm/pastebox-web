@@ -15,10 +15,12 @@ func NewPasteRepository(db *sql.DB) *PasteRepository {
 	}
 }
 
-func (pr *PasteRepository) CountByUserID(ctx context.Context, userID int64) (int, error) {
+func (pr *PasteRepository) CountByUserID(ctx context.Context, userID int64, onlyFavorites bool) (int, error) {
 	var total int
 
-	err := pr.db.QueryRowContext(ctx, `SELECT COUNT(*) FROM pastes WHERE user_id = $1`, userID).Scan(&total)
+	err := pr.db.QueryRowContext(ctx, `
+	SELECT COUNT(*) FROM pastes WHERE user_id = $1 AND ($2 = false OR is_favorite = true)
+	`, userID, onlyFavorites).Scan(&total)
 	if err != nil {
 		return 0, err
 	}
